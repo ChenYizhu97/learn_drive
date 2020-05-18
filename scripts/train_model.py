@@ -7,16 +7,18 @@ from torch.utils.data import Dataset
 from torch.utils.data import DataLoader
 from torchvision import transforms
 
+tsfm = transforms.Compose([
+            transforms.Resize((160, 160)),
+            transforms.ToTensor(),
+        ])
+
 class MyTDataset(Dataset):
 
     def __init__(self, images_dir='images', labels_dir='labels'):
         images = os.listdir(images_dir) 
         self.image_paths = [os.path.join(images_dir, image) for image in images]
         self.T_labels = np.loadtxt(os.path.join(labels_dir, 'T_labels.csv'), delimiter='\n', dtype=np.float32)
-        self.transform = transforms.Compose([
-            transforms.Resize((160, 160)),
-            transforms.ToTensor(),
-        ])
+        self.transform = tsfm
         super().__init__()
 
     def __len__(self):

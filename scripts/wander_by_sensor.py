@@ -17,8 +17,8 @@ while True:
     
     if rotate:
         robot.send_velocity(0, ang_vel)
-        robot.rate.sleep()
+
 
     else:
         robot.send_velocity(lin_vel, 0)
-        robot.rate.sleep()
+ 

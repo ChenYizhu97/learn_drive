@@ -46,6 +46,7 @@ class Robot(object):
         vel_msg.angular.z = ang_vel
         
         self.velocity_publisher.publish(vel_msg)
+        self.rate.sleep()
                
     def _update_camera(self, data, ):
         self.camera_img = data
