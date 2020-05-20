@@ -2,6 +2,7 @@ from myT import Robot
 import rospy
 import numpy as np
 import time
+import random
 from PIL import Image
 
 
@@ -10,8 +11,8 @@ rospy.init_node('collect_data', anonymous=True)
 robot = Robot('thymio', rate=12)
 
 sample_number = 0
-images_dir = 'images/'
-labels_dir = 'labels/'
+images_dir = 'dataset/images/'
+labels_dir = 'dataset/labels/'
 
 T_labels = []
 C_labels = []
@@ -25,13 +26,18 @@ while sample_number < 1000:
     
     image = Image.fromarray(image_np)
     img_path = '{}image{}.png'.format(images_dir, sample_number)
-    image.save(img_path)
+    
+    T_label = np.dot(sensor_vector, T_vector)/3
+    C_label = np.dot(sensor_vector, C_vector)/4
 
-    T_label = np.dot(sensor_vector, T_vector)
-    C_label = np.dot(sensor_vector, C_vector)
+    if abs(C_label) < 0.001:
+        if random.randint(1, 100) < 100:
+            time.sleep(1)
+            continue
+
     T_labels.append(T_label)
     C_labels.append(C_label)
-    
+    image.save(img_path)
     sample_number = sample_number + 1
     print('collected the {} sample...'.format(sample_number))
     time.sleep(1)

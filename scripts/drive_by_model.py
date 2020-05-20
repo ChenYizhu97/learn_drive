@@ -25,7 +25,7 @@ if __name__ == "__main__":
         
         rospy.loginfo('The predict T is {:.4f}, the real T is {:.4f}'.format(T_predict, T_real))
 
-        ang_vel = -T_predict * pi
+        ang_vel = T_predict * 6 * pi
         lin_vel = 0.2
         
         robot.send_velocity(lin_vel, ang_vel)

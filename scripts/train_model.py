@@ -31,7 +31,7 @@ class MyTDataset(Dataset):
         return image, label
 
 model = nn.Sequential(
-         nn.Conv2d(3, 6, (6, 6)),
+        nn.Conv2d(3, 6, (6, 6)),
         nn.Conv2d(6, 12, (6, 6)),
         nn.MaxPool2d((5, 5)),
         nn.Conv2d(12, 24, (4, 4)),
@@ -50,22 +50,26 @@ model = nn.Sequential(
 if __name__ == "__main__":
        
     dataset = MyTDataset()
-    dataloader = DataLoader(dataset, 4)
+    dataloader = DataLoader(dataset, 128, shuffle=True)
     
-    loss_mse = nn.MSELoss()
+    L1_loss = nn.L1Loss()
 
-    optimizer = torch.optim.SGD(model.parameters(), lr=0.1)
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.00001)
 
     losses = []
 
-    for batch_id, (images, labels) in enumerate(dataloader):
-        optimizer.zero_grad()
-        predicts = model(images).reshape(-1)
-        loss = loss_mse(predicts, labels)
-        loss.backward()
-        optimizer.step()
-        
-        losses.append(loss.detach().numpy().item())
-        print('batch {}, loss is {:.10f}'.format(batch_id, loss))
-    
+    for epoch in range(0, 10):
+        loss = 0
+        for batch_id, (images, labels) in enumerate(dataloader):
+            optimizer.zero_grad()
+            predicts = model(images).reshape(-1)
+            batch_loss = L1_loss(predicts, labels)
+            batch_loss.backward()
+            optimizer.step()
+            
+            loss += batch_loss.detach().numpy().item()       
+        print('epoch {}, loss is {:.10f}'.format(epoch, loss))
+        losses.append(loss)    
     torch.save(model.state_dict(), 'model_state')
+
+    print(losses)

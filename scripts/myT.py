@@ -37,7 +37,7 @@ class Robot(object):
         return img
     
     def read_sensor(self, ):
-        sensor_vector = [self.sensor1, self.sensor2, self.sensor3, self.sensor4, self.sensor5,]
+        sensor_vector = [self.sensor1/0.12, self.sensor2/0.12, self.sensor3/0.12, self.sensor4/0.12, self.sensor5/0.12,]
         return np.asarray(sensor_vector)
 
     def send_velocity(self, lin_vel, ang_vel, ):
