@@ -14,9 +14,8 @@ tsfm = transforms.Compose([
 
 class MyTDataset(Dataset):
 
-    def __init__(self, images_dir='images', labels_dir='labels'):
-        images = os.listdir(images_dir) 
-        self.image_paths = [os.path.join(images_dir, image) for image in images]
+    def __init__(self, images_dir='dataset/images', labels_dir='dataset/labels'):
+        self.images_dir = images_dir
         self.T_labels = np.loadtxt(os.path.join(labels_dir, 'T_labels.csv'), delimiter='\n', dtype=np.float32)
         self.transform = tsfm
         super().__init__()
@@ -25,7 +24,9 @@ class MyTDataset(Dataset):
         return len(self.image_paths)
 
     def __getitem__(self, index):
-        image = Image.open(self.image_paths[index])
+        image_name = 'image' + str(index) +'.png'
+        image_path = os.path.join(self.images_dir, image_name)
+        image = Image.open(image_path)
         image = self.transform(image)
         label = self.T_labels[index]
         return image, label

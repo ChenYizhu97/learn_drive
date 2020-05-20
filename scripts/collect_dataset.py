@@ -1,4 +1,6 @@
 from myT import Robot
+import os
+import re
 import rospy
 import numpy as np
 import time
@@ -20,12 +22,20 @@ T_vector = np.asarray([1, 2, 0, -2, -1])
 C_vector = np.asarray([-1, -1, 4, -1, -1])
 
 
+image_names = os.listdir(images_dir)
+if len(image_names) == 0:
+    base_idx = 0
+else:
+    image_id = [ int(re.findall(r'\d+', image_name)[0]) for image_name in image_names]
+    base_idx = max(image_id) + 1
+
+
 while sample_number < 1000:
     image_np = robot.read_camera()
     sensor_vector = robot.read_sensor()
     
     image = Image.fromarray(image_np)
-    img_path = '{}image{}.png'.format(images_dir, sample_number)
+    img_path = '{}image{}.png'.format(images_dir, base_idx+sample_number)
     
     T_label = np.dot(sensor_vector, T_vector)/3
     C_label = np.dot(sensor_vector, C_vector)/4
@@ -42,5 +52,9 @@ while sample_number < 1000:
     print('collected the {} sample...'.format(sample_number))
     time.sleep(1)
 
-np.savetxt(labels_dir+'T_labels.csv', T_labels, delimiter='\n')
-np.savetxt(labels_dir+'C_labels.csv', C_labels, delimiter='\n')
+with open(labels_dir+'T_labels.csv', 'ba') as T_labels_file:
+    np.savetxt(T_labels_file, T_labels, delimiter='\n')
+
+
+with open(labels_dir+'C_labels.csv', 'ba') as C_labels_file:
+    np.savetxt(C_labels_file, C_labels, delimiter='\n')
