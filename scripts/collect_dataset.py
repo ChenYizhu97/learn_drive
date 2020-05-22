@@ -42,7 +42,7 @@ while sample_number < 1000:
 
     if abs(C_label) < 0.001:
         if random.randint(1, 100) < 100:
-            time.sleep(1)
+            time.sleep(0.1)
             continue
 
     T_labels.append(T_label)
@@ -50,7 +50,7 @@ while sample_number < 1000:
     image.save(img_path)
     sample_number = sample_number + 1
     print('collected the {} sample...'.format(sample_number))
-    time.sleep(1)
+    time.sleep(0.1)
 
 with open(labels_dir+'T_labels.csv', 'ba') as T_labels_file:
     np.savetxt(T_labels_file, T_labels, delimiter='\n')
