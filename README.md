@@ -1,6 +1,6 @@
 # Intro
 This the final project of 'Robotics-spring 2020' in Universita della Svizzera Italiana.
-The goal of this project is to trainning a CNN regressor which maps the each image captured by the robot into two values that are used to drive the robot avoiding obstacles.
+The main goal of this project is to trainning a CNN regressor which maps the each image captured by the robot into two values that are used to drive the robot avoiding obstacles.
 
 # Enviroment
 ## Robot
@@ -23,5 +23,12 @@ The ResNet18 extract features from the images and the three full connection laye
 The loss function is the mean L1 loss. The optimizer is the Adam optimizer with lr=0.0001. The batchsize during trainning is 64. After 100 epochs of trainning, the model seems could drive the robot avoiding obstacles for a certain time.
 Here is the video that shows the robot driving by model. https://youtu.be/X4u4RAbQHjw . 
 
-# Future work
-Completing codes and documents. Creating different worlds for testing the robot...
+# Usage
+- run 'roslaunch learn_drive thymio_gazebo_bringup.launch name:=thymio world:=simple' to start the simulation with training world. Change simple to triangle for running test world.
+- run 'roslaunch learn_drive collect_dataset.launch' for collecting data set.
+- run 'roslaunch learn_drive drive_by_model.launch' to drive robot by model. Make sure to run it under the path learn_drive/scripts/ , otherwise it cant find the model_state file.
+- run 'roslaunch learn_drive drive_by_sensor.launch' to drive robot by sensor.
+
+Don't change the name of robot, the scripts are not properly organised. If you change the name of robot, you also have to change that name in scripts.
+
+Create the directories mentioned in the script 'collect_dataset.py' before you collect data. 

@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<launch>
+	<node pkg="learn_drive" name="drive_by_model" type="drive_by_model.py"/>
+</launch>

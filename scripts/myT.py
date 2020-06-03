@@ -6,10 +6,13 @@ from sensor_msgs.msg import Range
 from sensor_msgs.msg import Image
 from math import pi
 
+# basic MyT class
+
 class Robot(object):
     
     def __init__(self, name, rate=12):
         
+	# keep name, rate, sensors' values and image from camera.
         self.name = name
         self.camera_img = Image()
         self.sensor1 = 0.12
@@ -18,7 +21,8 @@ class Robot(object):
         self.sensor4 = 0.12
         self.sensor5 = 0.12
         self.rate = rospy.Rate(rate)
-
+	
+	# set subscriber and publisher
         self.camera_subscriber = rospy.Subscriber(name+'/camera/image_raw', numpy_msg(Image), self._update_camera)
         self.sensor1_subscriber = rospy.Subscriber(name+'/proximity/left', Range, self._update_sensor1)   
         self.sensor2_subscriber = rospy.Subscriber(name+'/proximity/center_left', Range, self._update_sensor2)

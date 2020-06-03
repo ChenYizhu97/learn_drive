@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import os
 import torch
 import torch.nn as nn
@@ -8,11 +9,13 @@ from torch.utils.data import Dataset
 from torch.utils.data import DataLoader
 from torchvision import transforms
 
+# transforms of input
 tsfm = transforms.Compose([
             transforms.Resize((224, 224)),
             transforms.ToTensor(),
         ]) 
 
+# custome class for data set
 class MyTDataset(Dataset):
 
     def __init__(self, images_dir=os.path.join('dataset', 'images'), labels_dir=os.path.join('dataset', 'labels'), transform=tsfm):
@@ -45,11 +48,11 @@ model =  nn.Sequential(
         nn.ReLU(),
         nn.Linear(128, 2),
         nn.Tanh(),
-        ).cuda()   
+        ) 
     
 if __name__ == "__main__":
-       
-    #dataset = MyTDataset()
+    # need cuda to train the model.   
+    model = model.cuda()
     dataset = MyTDataset(transform=tsfm)
     dataloader = DataLoader(dataset, 64, shuffle=True, num_workers=4)
     
@@ -70,19 +73,27 @@ if __name__ == "__main__":
             labels_C = labels_C.cuda()
             labels_T = labels_T.cuda()
             predicts = model(images).reshape(-1, 2)
+            
+            # get labels
             predicts_T = predicts[:,0]
             predicts_C = predicts[:,1]
+            
+            # get each loss
             batch_loss_T = L1_loss(predicts_T, labels_T)
             batch_loss_C = L1_loss(predicts_C, labels_C)
+
             batch_loss_C.backward(retain_graph=True)
             batch_loss_T.backward()
             optimizer.step()            
+            
+            # record
             loss_T += batch_loss_T.detach() * batch_size             
             loss_C += batch_loss_C.detach() * batch_size            
             print('epoch {}, batch {}...\r'.format(epoch, batch_id), end='')
         print('epoch {}, loss_T is {}, loss_C is {}'.format(epoch, loss_T, loss_C))
         losses_T.append(loss_T)
-        losses_C.append(loss_C)    
+        losses_C.append(loss_C)
+    # save model state    
     torch.save(model.state_dict(), 'model_state')
     print(losses_T)
     print(losses_C)
