@@ -16,6 +16,11 @@ T-> 1 when obstacles are on the left.  T -> 0 when obstacles are symmetric w.r.t
 C -> 1 when obstacle is centered. C -> 0 when there is no obstacle. C --> -1 when obstacle is not centered.
 The predicted labels are used to drive the robot avoiding obstacles.
 
+# How to drive
+- Linear velocity = (1-abs(C)) * C * v_0 
+  Angular velocity = T * a_0
+- Stop and rotate when C > threshold_0 or C < threshold_1 
+
 # Model
 The architecture of the model is ResNet18 -> BN(ReLU(Linear(1000, 512))) -> BN(ReLU(Linear(512, 128))) -> Tanh(Linear(512, 2)).
 The ResNet18 extract features from the images and the three full connection layers do the regression. 
