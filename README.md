@@ -17,7 +17,7 @@ C -> 1 when obstacle is centered. C -> 0 when there is no obstacle. C --> -1 whe
 The predicted labels are used to drive the robot avoiding obstacles.
 
 # How to drive
-- Linear velocity = (1-abs(C)) * C * v_0 
+- Linear velocity = (1-abs(C)) * v_0 
   Angular velocity = T * a_0
 - Stop and rotate when C > threshold_0 or C < threshold_1 
 
