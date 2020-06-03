@@ -21,7 +21,7 @@ The architecture of the model is ResNet18 -> BN(ReLU(Linear(1000, 512))) -> BN(R
 The ResNet18 extract features from the images and the three full connection layers do the regression. 
 ## train
 The loss function is the mean L1 loss. The optimizer is the Adam optimizer with lr=0.0001. The batchsize during trainning is 64. After 100 epochs of trainning, the model seems could drive the robot avoiding obstacles for a certain time.
-Here is the video that shows the robot driving by model. https://youtu.be/X4u4RAbQHjw . 
+Here are the videos that shows the robot driving by model. https://youtu.be/X4u4RAbQHjw. https://youtu.be/oHs6NMXtruU. 
 
 # Usage
 - run 'roslaunch learn_drive thymio_gazebo_bringup.launch name:=thymio world:=simple' to start the simulation with training world. Change simple to triangle for running test world.
